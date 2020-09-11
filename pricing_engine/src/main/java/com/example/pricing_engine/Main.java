@@ -5,13 +5,15 @@
  */
 package com.example.pricing_engine;
 
+import com.example.pricing_engine.enums.ChainAssembly;
+import com.example.pricing_engine.model.Price;
 import com.example.pricing_engine.enums.Components;
 import com.example.pricing_engine.enums.Frame;
-import com.example.pricing_engine.enums.FramePrice;
 import com.example.pricing_engine.enums.HandleBar;
-import com.example.pricing_engine.enums.HandleBarPrice;
 import com.example.pricing_engine.enums.Seat;
-import com.example.pricing_engine.enums.SeatPrice;
+import com.example.pricing_engine.enums.Wheels;
+import com.example.pricing_engine.util.PriceList;
+import com.example.pricing_engine.util.Constants;
 import java.util.EnumSet;
 import java.util.Scanner;
 
@@ -21,22 +23,24 @@ import java.util.Scanner;
  */
 public class Main {
 
-    static Scanner sc = new Scanner(System.in);
-    static Price price = new Price();
+    public static Scanner sc = new Scanner(System.in);
+    public static Price price = new Price();
 
     public static void main(String args[]) {
 
         System.out.println("Pricing Engine for Cycle");
+        System.out.println("Select purechase month:");
+        System.out.println("1.Jan/2016 - Nov/2016 \n2.Dec2-2016 - Onwards");
+        int priceCycle = sc.nextInt();
+        if (priceCycle == 1) {
+            price.setPriceCycle(Constants.PeriodOne);
+        } else {
+            price.setPriceCycle(Constants.PeriodTwo);
+        }
+
         callMethod();
     }
 
-//    private <T extends Enum<T>> void enumSetting(Class<T> enumType) {
-//        EnumSet.allOf(enumType.)
-//                .forEach(type -> {
-//            System.out.println(type.value + "." + type);
-//        });
-//
-//    }
     private static void callMethod() {
 
         System.out.println("Select the components from list");
@@ -48,88 +52,128 @@ public class Main {
         Components[] components = Components.values();
         switch (components[option - 1]) {
             case Frame: {
-                frameSelection();
+                frameSelection(components[option - 1].toString());
                 callMethod();
                 break;
             }
             case HandleBar: {
-                handleBarSelection();
+                handleBarSelection(components[option - 1].toString());
                 callMethod();
                 break;
             }
             case Seating: {
-                seatSelection();
+                seatSelection(components[option - 1].toString());
                 callMethod();
                 break;
             }
             case Wheels: {
-                frameSelection();
+                wheelSelection(components[option - 1].toString());
                 callMethod();
                 break;
             }
             case ChainAssembly: {
-                frameSelection();
+                chainSelection(components[option - 1].toString());
                 callMethod();
                 break;
             }
-
-            default:
+            case Buy: {
+                buyProduct();
                 break;
-
+            }
         }
     }
 
-    private static void frameSelection() {
+    private static void frameSelection(String itemComponent) {
         System.out.println("Select Frame type:");
         EnumSet.allOf(Frame.class)
                 .forEach(type -> {
                     System.out.println(type.value + "." + type);
                 });
 
-        int frameOption = sc.nextInt();
+        int option = sc.nextInt();
         Frame[] frameValues = Frame.values();
-//        System.out.println(frameValues[frameOption - 1]);
 
-        String typ = frameValues[frameOption - 1].toString();
+        String typ = frameValues[option - 1].toString();
 
-//        System.out.println(FramePrice.valueOf(typ).getPrice());
         price.setFrameType(typ);
-        price.setFramePrice(FramePrice.valueOf(typ).getPrice());
+        PriceList.pricing(itemComponent, typ, price.getPriceCycle());
+        System.out.println("Your cart: " + price.getFrameType() + " - " + price.getFramePrice());
     }
 
-    private static void handleBarSelection() {
+    private static void handleBarSelection(String itemComponent) {
         System.out.println("Select Handle Bar type:");
         EnumSet.allOf(HandleBar.class)
                 .forEach(type -> {
                     System.out.println(type.value + "." + type);
                 });
 
-        int handleBarOption = sc.nextInt();
+        int option = sc.nextInt();
         HandleBar[] handleBarValues = HandleBar.values();
-        System.out.println(handleBarValues[handleBarOption - 1]);
 
-        String typ = handleBarValues[handleBarOption - 1].toString();
+        String typ = handleBarValues[option - 1].toString();
 
-        System.out.println(HandleBarPrice.valueOf(typ).getPrice());
         price.setHandleBarType(typ);
-        price.setHandleBarPrice(HandleBarPrice.valueOf(typ).getPrice());
+        PriceList.pricing(itemComponent, typ, price.getPriceCycle());
+        System.out.println("Your cart: " + price.getHandleBarType() + " - " + price.getHandleBarPrice());
     }
 
-    private static void seatSelection() {
+    private static void seatSelection(String itemComponent) {
         System.out.println("Select Seat type:");
         EnumSet.allOf(Seat.class)
                 .forEach(type -> {
                     System.out.println(type.value + "." + type);
                 });
 
-        int handleBarOption = sc.nextInt();
+        int option = sc.nextInt();
         Seat[] seatValues = Seat.values();
-        System.out.println(seatValues[handleBarOption - 1]);
+        String typ = seatValues[option - 1].toString();
+        price.setSeatType(typ);
+        PriceList.pricing(itemComponent, typ, price.getPriceCycle());
+        System.out.println("Your cart: " + price.getSeatType() + " - " + price.getSeatPrice());
+    }
 
-        String typ = seatValues[handleBarOption - 1].toString();
+    private static void wheelSelection(String itemComponent) {
+        System.out.println("Select Wheel type:");
+        EnumSet.allOf(Wheels.class)
+                .forEach(type -> {
+                    System.out.println(type.value + "." + type);
+                });
 
-        System.out.println(SeatPrice.valueOf(typ).getPrice());
-        price.setHandleBarType(typ);
-        price.setHandleBarPrice(SeatPrice.valueOf(typ).getPrice());
+        int option = sc.nextInt();
+        Wheels[] seatValues = Wheels.values();
+        String typ = seatValues[option - 1].toString();
+        price.setWheelType(typ);
+        PriceList.pricing(itemComponent, typ, price.getPriceCycle());
+        System.out.println("Your cart: " + price.getWheelType() + " - " + price.getWheelPrice());
+    }
+
+    private static void chainSelection(String itemComponent) {
+        System.out.println("Select Chain Assembly type:");
+        EnumSet.allOf(ChainAssembly.class)
+                .forEach(type -> {
+                    System.out.println(type.value + "." + type);
+                });
+
+        int option = sc.nextInt();
+        ChainAssembly[] seatValues = ChainAssembly.values();
+        String typ = seatValues[option - 1].toString();
+        price.setChainType(typ);
+        PriceList.pricing(itemComponent, typ, price.getPriceCycle());
+        System.out.println("Your cart: " + price.getChainType() + " - " + price.getChainPrice());
+    }
+
+    private static void buyProduct() {
+        System.out.println("Your orders:");
+        System.out.println("Frame type: " + price.getFrameType() + " - Price: " + price.getFramePrice());
+        System.out.println("HandleBar type: " + price.getHandleBarType() + " - Price: " + price.getHandleBarPrice());
+        System.out.println("Seat type: " + price.getSeatType() + " - Price: " + price.getSeatPrice());
+        System.out.println("Wheel type: " + price.getWheelType() + " - Price: " + price.getWheelPrice());
+        System.out.println("Chain type: " + price.getChainType() + " - Price: " + price.getChainPrice());
+        int total = price.getFramePrice() + price.getHandleBarPrice() + price.getSeatPrice() + price.getWheelPrice() + price.getChainPrice();
+        System.out.println("Total: " + total);
+    }
+
+    public static Price getPriceInstance() {
+        return price;
     }
 }

@@ -15,7 +15,7 @@ public enum Components {
     Seating(3),
     Wheels(4),
     ChainAssembly(5),
-    Buy(0);
+    Buy(6);
 
     public final int value;
 

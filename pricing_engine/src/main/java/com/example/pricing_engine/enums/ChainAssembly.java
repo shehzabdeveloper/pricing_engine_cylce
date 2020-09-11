@@ -9,17 +9,17 @@ package com.example.pricing_engine.enums;
  *
  * @author Shehzab Ahammad
  */
-public enum SeatPrice {
-    Leather(200),
-    Cloth(100);
+public enum ChainAssembly {
+    Gear4(1),
+    Gear8(2);
 
-    public final int price;
+    public final int value;
 
-    SeatPrice(int price) {
-        this.price = price;
+    ChainAssembly(int value) {
+        this.value = value;
     }
 
-    public int getPrice() {
-        return price;
+    public int getValue() {
+        return value;
     }
 }

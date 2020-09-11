@@ -9,17 +9,17 @@ package com.example.pricing_engine.enums;
  *
  * @author Shehzab Ahammad
  */
-public enum FramePrice {
-    STEEL(250),
-    ALUMINUM(400);
+public enum Wheels {
+    Tubeless(1),
+    Tube(2);
 
-    public final int price;
+    public final int value;
 
-    FramePrice(int price) {
-        this.price = price;
+    Wheels(int value) {
+        this.value = value;
     }
 
-    public int getPrice() {
-        return price;
+    public int getValue() {
+        return value;
     }
 }
